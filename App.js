@@ -17,7 +17,8 @@ import {
   StatusBar,
   ToastAndroid,
   Dimensions,
-  TouchableHighlight
+  TouchableHighlight,
+  Alert
 } from 'react-native';
 import {
   LineChart
@@ -38,7 +39,8 @@ import {
        type: 1,
        mean: 0,
        median: 0,
-       visible: 0
+       visible: 0,
+       hazard: [false,false]
      }
    }
 
@@ -51,23 +53,31 @@ import {
       }
     }).then(res => res.json())
     .then((json) => {
-      this.setState({ readings: [...this.state.readings,json] })
-      this.state.readings.map((e) => { 
-          var Press_1 = [];
-          var Humid_1 = [];
-          var Temp_1 = [];
-          var Gas_1 = [];
-          var Alt_1 = [];
-          var Time_1 = [];
-          var sport = 0;
-        e.map((a) => {
+      this.setState({ readings: json });
+      var Press_1 = [];
+      var Humid_1 = [];
+      var Temp_1 = [];
+      var Gas_1 = [];
+      var Alt_1 = [];
+      var Time_1 = [];
+      var sport = 0;
+      var test = [false,false];
+      this.state.readings.map((a) => { 
           Press_1.push(parseFloat(a.Pressure.toFixed(2)));
           Humid_1.push(parseFloat(a.humidity.toFixed(2)));
           Temp_1.push(parseFloat(a.temperature.toFixed(2)));
+          if (a.temperature >= 30 || a.temperature <= 10)
+          {
+            test[0] = true;
+          }
           Gas_1.push(parseFloat(a.gas.toFixed(2)));
           Alt_1.push(parseFloat(a.Altitude.toFixed(2)));
           Time_1.push(sport.toString());
-          sport += 5;
+          sport += 5;  
+          if (!(a.AQI == "GOOD")) 
+          {
+            test[1] = true;
+          } 
         });
         this.setState({
           Temp: Temp_1,
@@ -77,36 +87,111 @@ import {
           Alt: Alt_1,
           Time: Time_1,
           counter: sport
-        });       
-      })
-    }).catch((err) => {ToastAndroid.show(""+err,ToastAndroid.SHORT)});
-    /*try {
-    setInterval(async () => {
-      var arr_Temp;
-      var arr_Press;
-      var arr_Humid;
-      var arr_Time;
-      fetch(`http://10.30.9.65:5000/request`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+        });
+        var prob = "Hazardous ";
+      test.map((a,i) => {
+        if (i == 0 && a == true)
+        {
+          prob += "temperature,";
         }
-      }).then(res => res.json())
-      .then((json) => {
-        arr_Temp = [...this.state.Temp];
-        arr_Press = [...this.state.Press];
-        arr_Humid = [...this.state.Humid]
-        arr_Time = [...this.state.Time];
-        if (arr_Temp.length == 10 || arr_Time.length == 10 || arr_Press.length == 10 || arr_Humid.length == 10) 
+        if (i == (test.length-1) && a == true)
+        {
+          prob += "AQI";
+        }
+      });     
+      if (prob.length > 10)
       {
-        arr_BPM.shift();
-        arr_Time.shift();
-      }
-      this.setState({ readings: [...this.state.readings,json],SpO2: [...this.state.SpO2,parseInt(json.SpO2)],BPM: [...arr_BPM,parseInt(json.BPM)],Temp: [...this.state.Temp,parseInt(json.Temp)],Time: [...arr_Time,this.state.counter.toString()],counter: this.state.counter+5 })
+        prob += " detected";
+        Alert.alert(
+          "Warning",
+          prob,
+          [
+            {
+              text: "OK"
+            },
+          ],
+          {
+            cancelable: false
+          });
+      } 
     }).catch((err) => {ToastAndroid.show(""+err,ToastAndroid.SHORT)});
-  }, 5000);
-} catch(err) {ToastAndroid.show(""+err,ToastAndroid.SHORT)}*/
+    setTimeout(() => { 
+    try {
+    setInterval(async () => {
+      fetch(`https://mw6gyikpy5.execute-api.us-west-2.amazonaws.com/`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json())
+    .then((json) => {
+      this.setState({ readings: json });
+      var Press_1 = [];
+      var Humid_1 = [];
+      var Temp_1 = [];
+      var Gas_1 = [];
+      var Alt_1 = [];
+      var Time_1 = [];
+      var sport = 0;
+      var test = [false,false];
+      this.state.readings.map((a) => { 
+          Press_1.push(parseFloat(a.Pressure.toFixed(2)));
+          Humid_1.push(parseFloat(a.humidity.toFixed(2)));
+          Temp_1.push(parseFloat(a.temperature.toFixed(2)));
+          if (a.temperature >= 30 || a.temperature <= 10)
+          {
+            test[0] = true;
+          }
+          Gas_1.push(parseFloat(a.gas.toFixed(2)));
+          Alt_1.push(parseFloat(a.Altitude.toFixed(2)));
+          Time_1.push(sport.toString());
+          sport += 5;
+          if  (!(a.AQI == "GOOD")) 
+          {
+            test[1] = true;
+          } 
+      });
+      this.setState({
+        Temp: Temp_1,
+        Press: Press_1,
+        Humid: Humid_1,
+        Gas: Gas_1,
+        Alt: Alt_1,
+        Time: Time_1,
+        counter: sport
+      });  
+      var prob = "Hazardous ";
+      test.map((a,i) => {
+        if (i == 0 && a)
+        {
+          prob += "temperature,";
+        }
+        if (i == (test.length-1) && a)
+        {
+          prob += "AQI";
+        }
+      });     
+      //ToastAndroid.show(prob,ToastAndroid.SHORT);
+      if (prob.length > 10)
+      {
+        prob += " detected";
+        Alert.alert(
+          "Warning",
+          prob,
+          [
+            {
+              text: "OK"
+            },
+          ],
+          {
+            cancelable: false
+          });
+      }      
+    }).catch((err) => {ToastAndroid.show(""+err,ToastAndroid.SHORT)});
+  }, 10000);
+} catch(err) {ToastAndroid.show(""+err,ToastAndroid.SHORT)}
+    },10000);
   }
 
   calculateMM() {
@@ -188,10 +273,10 @@ import {
             }
           ]
         }}
-        width={Dimensions.get("window").width} // from react-native
+        width={Dimensions.get("window").width}
         height={220}
         xAxisLabel=" s"
-        yAxisInterval={1} // optional, defaults to 1
+        yAxisInterval={1}
         chartConfig={{
           backgroundColor: "#e26a00",
           backgroundGradientFrom: "#fb8c00",
