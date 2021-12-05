@@ -40,7 +40,7 @@ import {
        mean: 0,
        median: 0,
        visible: 0,
-       hazard: [false,false]
+       hazard: [false,false,false,false,false,false]
      }
    }
 
@@ -61,14 +61,22 @@ import {
       var Alt_1 = [];
       var Time_1 = [];
       var sport = 0;
-      var test = [false,false];
+      var test = [false,false,false,false];
       this.state.readings.map((a) => { 
           Press_1.push(parseFloat(a.Pressure.toFixed(2)));
-          Humid_1.push(parseFloat(a.humidity.toFixed(2)));
-          Temp_1.push(parseFloat(a.temperature.toFixed(2)));
-          if (a.temperature >= 30 || a.temperature <= 10)
+          if (a.temperature >= 35 || a.temperature <= 10)
           {
             test[0] = true;
+          }
+          Humid_1.push(parseFloat(a.humidity.toFixed(2)));
+          if (a.Pressure >= 1020 || a.Pressure <= 930)
+          {
+            test[1] = true;
+          }
+          Temp_1.push(parseFloat(a.temperature.toFixed(2)));
+          if (a.humidity <= 30 || a.humidity >= 80)
+          {
+            test[2] = true;
           }
           Gas_1.push(parseFloat(a.gas.toFixed(2)));
           Alt_1.push(parseFloat(a.Altitude.toFixed(2)));
@@ -76,7 +84,7 @@ import {
           sport += 5;  
           if (!(a.AQI == "GOOD")) 
           {
-            test[1] = true;
+            test[3] = true;
           } 
         });
         this.setState({
@@ -94,7 +102,15 @@ import {
         {
           prob += "temperature,";
         }
-        if (i == (test.length-1) && a == true)
+        if (i == 1 && a == true)
+        {
+          prob += "pressure,"
+        }
+        if (i == 2 && a == true)
+        {
+          prob += "humidity,"
+        }
+        if (i == 3 && a == true)
         {
           prob += "AQI";
         }
@@ -137,11 +153,19 @@ import {
       var test = [false,false];
       this.state.readings.map((a) => { 
           Press_1.push(parseFloat(a.Pressure.toFixed(2)));
-          Humid_1.push(parseFloat(a.humidity.toFixed(2)));
-          Temp_1.push(parseFloat(a.temperature.toFixed(2)));
-          if (a.temperature >= 30 || a.temperature <= 10)
+          if (a.temperature >= 35 || a.temperature <= 10)
           {
             test[0] = true;
+          }
+          Humid_1.push(parseFloat(a.humidity.toFixed(2)));
+          if (a.Pressure >= 1020 || a.Pressure <= 930)
+          {
+            test[1] = true;
+          }
+          Temp_1.push(parseFloat(a.temperature.toFixed(2)));
+          if (a.humidity <= 30 || a.humidity >= 80)
+          {
+            test[2] = true;
           }
           Gas_1.push(parseFloat(a.gas.toFixed(2)));
           Alt_1.push(parseFloat(a.Altitude.toFixed(2)));
@@ -149,7 +173,7 @@ import {
           sport += 5;
           if  (!(a.AQI == "GOOD")) 
           {
-            test[1] = true;
+            test[3] = true;
           } 
       });
       this.setState({
@@ -167,7 +191,15 @@ import {
         {
           prob += "temperature,";
         }
-        if (i == (test.length-1) && a)
+        if (i == 1 && a == true)
+        {
+          prob += "pressure,"
+        }
+        if (i == 2 && a == true)
+        {
+          prob += "humidity,"
+        }
+        if (i == 3 && a == true)
         {
           prob += "AQI";
         }
