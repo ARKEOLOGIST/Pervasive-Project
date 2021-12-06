@@ -60,7 +60,7 @@ import {
       var Gas_1 = [];
       var Alt_1 = [];
       var Time_1 = [];
-      var sport = 0;
+      var sport = this.state.counter;
       var test = [false,false,false,false];
       this.state.readings.map((a) => { 
           Press_1.push(parseFloat(a.Pressure.toFixed(2)));
@@ -149,8 +149,8 @@ import {
       var Gas_1 = [];
       var Alt_1 = [];
       var Time_1 = [];
-      var sport = 0;
-      var test = [false,false];
+      var sport = this.state.counter;
+      var test = [false,false,false,false];
       this.state.readings.map((a) => { 
           Press_1.push(parseFloat(a.Pressure.toFixed(2)));
           if (a.temperature >= 35 || a.temperature <= 10)
@@ -204,7 +204,6 @@ import {
           prob += "AQI";
         }
       });     
-      //ToastAndroid.show(prob,ToastAndroid.SHORT);
       if (prob.length > 10)
       {
         prob += " detected";
@@ -338,7 +337,8 @@ import {
       <Text style={{ textAlign: "center",color: "white" }}>Mean: <Text>{this.state.mean}</Text></Text>
       <Text style = {{ textAlign: "center",color: "white" }}>Median: <Text>{this.state.median}</Text></Text>
       </View>:<View></View>}
-      <View style={{ marginTop: 300,flexDirection: "row"}}>
+      <View style={{ marginTop: 100 }}><Text style={{ textAlign: "center",fontSize: 22,color: "white" }}>AQI: {this.state.readings[0].AQI.toString()}</Text></View>
+      <View style={{ marginTop: 100,flexDirection: "row"}}>
       <TouchableHighlight style={this.state.type==1?styles.activebutton:styles.button} onPress={() => {this.setState({ type: 1,visible: 0 })}}><Text style={styles.text}>Temperature</Text></TouchableHighlight>
       <TouchableHighlight style={this.state.type==2?styles.activebutton:styles.button} onPress={() => {this.setState({ type: 2,visible: 0 })}}><Text style={styles.text}>Pressure</Text></TouchableHighlight>
       <TouchableHighlight style={this.state.type==3?styles.activebutton:styles.button} onPress={() => {this.setState({ type: 3,visible: 0 })}}><Text style={styles.text}>Humidity</Text></TouchableHighlight>
@@ -346,7 +346,7 @@ import {
       <TouchableHighlight style={this.state.type==5?styles.activebutton:styles.button} onPress={() => {this.setState({ type: 5,visible: 0 })}}><Text style={styles.text}>Altitude</Text></TouchableHighlight>
       </View>
       <View style={{ marginTop: '10%' }}>
-      <TouchableHighlight onPress={this.calculateMM.bind(this)}><Text style={styles.buttonText}>Get Stats!</Text></TouchableHighlight>
+      <TouchableHighlight style={{ height: 100,justifyContent: "center" }} onPress={this.calculateMM.bind(this)}><Text style={styles.buttonText}>Get Stats!</Text></TouchableHighlight>
       </View>
       </View>
         :<Text style={{ fontSize: 45,color: "white" }}>Welcome!</Text>}
