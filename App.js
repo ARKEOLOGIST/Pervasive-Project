@@ -293,7 +293,7 @@ import {
    {
     return (
       <View style={styles.center}>
-      {Object.keys(this.state.readings).length != 0?<Text style={{ fontSize: 25 }}>{this.renderSwitch(this.state.type)}</Text>:<Text>&nbsp;</Text>}
+      {Object.keys(this.state.readings).length != 0?<Text style={{ fontSize: 25,color: "white" }}>{this.renderSwitch(this.state.type)}</Text>:<Text>&nbsp;</Text>}
         {Object.keys(this.state.readings).length != 0?
           <View>
           <LineChart
@@ -310,12 +310,12 @@ import {
         xAxisLabel=" s"
         yAxisInterval={1}
         chartConfig={{
-          backgroundColor: "#e26a00",
-          backgroundGradientFrom: "#fb8c00",
-          backgroundGradientTo: "#ffa726",
-          decimalPlaces: 2, // optional, defaults to 2dp
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          backgroundColor: "#00ffff",
+          backgroundGradientFrom: "black",
+          backgroundGradientTo: "black",
+          decimalPlaces: 2, 
+          color: (opacity = 1) => `rgba(0, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(0, 255, 255, ${opacity})`,
           style: {
             borderRadius: 16
           },
@@ -335,8 +335,8 @@ import {
         }}
       />
       {this.state.visible==1?<View style={{flexDirection: "column"}}>
-      <Text style={{ textAlign: "center" }}>Mean: <Text>{this.state.mean}</Text></Text>
-      <Text style = {{ textAlign: "center" }}>Median: <Text>{this.state.median}</Text></Text>
+      <Text style={{ textAlign: "center",color: "white" }}>Mean: <Text>{this.state.mean}</Text></Text>
+      <Text style = {{ textAlign: "center",color: "white" }}>Median: <Text>{this.state.median}</Text></Text>
       </View>:<View></View>}
       <View style={{ marginTop: 300,flexDirection: "row"}}>
       <TouchableHighlight style={this.state.type==1?styles.activebutton:styles.button} onPress={() => {this.setState({ type: 1,visible: 0 })}}><Text style={styles.text}>Temperature</Text></TouchableHighlight>
@@ -346,10 +346,10 @@ import {
       <TouchableHighlight style={this.state.type==5?styles.activebutton:styles.button} onPress={() => {this.setState({ type: 5,visible: 0 })}}><Text style={styles.text}>Altitude</Text></TouchableHighlight>
       </View>
       <View style={{ marginTop: '10%' }}>
-      <TouchableHighlight style={{ alignItems: 'center',height: 50,justifyContent: 'center'}} onPress={this.calculateMM.bind(this)}><Text>Get Stats!</Text></TouchableHighlight>
+      <TouchableHighlight onPress={this.calculateMM.bind(this)}><Text style={styles.buttonText}>Get Stats!</Text></TouchableHighlight>
       </View>
       </View>
-        :<Text style={{ fontSize: 45 }}>Welcome!</Text>}
+        :<Text style={{ fontSize: 45,color: "white" }}>Welcome!</Text>}
       </View>
     );
    } 
@@ -359,21 +359,27 @@ const styles = StyleSheet.create({
   center: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: '#2F4F4F'
   },
   button: {
     flex: 1,
-    backgroundColor: "#A0EE52",
+    backgroundColor: "#6b788a",
     height: 100
   },
   activebutton: {
     flex: 1,
-    backgroundColor: "green",
+    backgroundColor: "#494f57",
     height: 100
   },
   text: {
     textAlign: "center",
-    marginTop: "25%",
+    marginTop: "40%",
+    color: "#00FFFF",
+    fontSize: 16
+  },
+  buttonText: {
+    textAlign: "center",
     color: "white",
     fontSize: 16
   }
