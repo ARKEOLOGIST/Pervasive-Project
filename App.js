@@ -61,31 +61,19 @@ import {
       var Alt_1 = [];
       var Time_1 = [];
       var sport = this.state.counter;
-      var test = [false,false,false,false];
+      var test = false;
       this.state.readings.map((a) => { 
           Press_1.push(parseFloat(a.Pressure.toFixed(2)));
-          if (a.temperature >= 35 || a.temperature <= 10)
+          if (a.temperature >= 45 || a.temperature <= 10)
           {
-            test[0] = true;
+            test = true;
           }
           Humid_1.push(parseFloat(a.humidity.toFixed(2)));
-          if (a.Pressure >= 1020 || a.Pressure <= 930)
-          {
-            test[1] = true;
-          }
           Temp_1.push(parseFloat(a.temperature.toFixed(2)));
-          if (a.humidity <= 30 || a.humidity >= 80)
-          {
-            test[2] = true;
-          }
           Gas_1.push(parseFloat(a.gas.toFixed(2)));
           Alt_1.push(parseFloat(a.Altitude.toFixed(2)));
           Time_1.push(sport.toString());
           sport += 5;  
-          if (!(a.AQI == "GOOD")) 
-          {
-            test[3] = true;
-          } 
         });
         this.setState({
           Temp: Temp_1,
@@ -97,27 +85,13 @@ import {
           counter: sport
         });
         var prob = "Hazardous ";
-      test.map((a,i) => {
-        if (i == 0 && a == true)
-        {
-          prob += "temperature,";
-        }
-        if (i == 1 && a == true)
-        {
-          prob += "pressure,"
-        }
-        if (i == 2 && a == true)
-        {
-          prob += "humidity,"
-        }
-        if (i == 3 && a == true)
-        {
-          prob += "AQI";
-        }
-      });     
+      if (test == true)
+      {
+        prob += " weather conditions "
+      }   
       if (prob.length > 10)
       {
-        prob += " detected";
+        prob += " detected!";
         Alert.alert(
           "Warning",
           prob,
@@ -150,31 +124,19 @@ import {
       var Alt_1 = [];
       var Time_1 = [];
       var sport = this.state.counter;
-      var test = [false,false,false,false];
+      var test = false;
       this.state.readings.map((a) => { 
           Press_1.push(parseFloat(a.Pressure.toFixed(2)));
-          if (a.temperature >= 35 || a.temperature <= 10)
+          if (a.temperature >= 45 || a.temperature <= 10)
           {
-            test[0] = true;
+            test = true;
           }
           Humid_1.push(parseFloat(a.humidity.toFixed(2)));
-          if (a.Pressure >= 1020 || a.Pressure <= 930)
-          {
-            test[1] = true;
-          }
           Temp_1.push(parseFloat(a.temperature.toFixed(2)));
-          if (a.humidity <= 30 || a.humidity >= 80)
-          {
-            test[2] = true;
-          }
           Gas_1.push(parseFloat(a.gas.toFixed(2)));
           Alt_1.push(parseFloat(a.Altitude.toFixed(2)));
           Time_1.push(sport.toString());
           sport += 5;
-          if  (!(a.AQI == "GOOD")) 
-          {
-            test[3] = true;
-          } 
       });
       this.setState({
         Temp: Temp_1,
@@ -186,27 +148,13 @@ import {
         counter: sport
       });  
       var prob = "Hazardous ";
-      test.map((a,i) => {
-        if (i == 0 && a)
-        {
-          prob += "temperature,";
-        }
-        if (i == 1 && a == true)
-        {
-          prob += "pressure,"
-        }
-        if (i == 2 && a == true)
-        {
-          prob += "humidity,"
-        }
-        if (i == 3 && a == true)
-        {
-          prob += "AQI";
-        }
-      });     
+      if (test == true)
+      {
+        prob += " weather conditions "
+      }   
       if (prob.length > 10)
       {
-        prob += " detected";
+        prob += " detected!";
         Alert.alert(
           "Warning",
           prob,
